@@ -1,12 +1,38 @@
 version: '3'
 
 services:
+  postgres:
+    container_name: epns_postgres
+    image: postgres
+    env_file:
+      - ./.env
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+  
   web:
     container_name: epns_web
     build: .
     command: >
-      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+      sh -c "python wait_for_postgres.py &&
+             python manage.py migrate && 
+             python manage.py runserver 0.0.0.0:8000"
     ports:
       - 8000:8000
+    env_file:
+      - ./.env
     volumes:
       - .:/code
+    depends_on:
+      - postgres
+
+networks:
+  postgres:
+    driver: bridge
+
+volumes:
+    postgres:
