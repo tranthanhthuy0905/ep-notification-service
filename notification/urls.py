@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SlackView
+from .views import SlackView, OutlookView, TeamsView, TelegramView
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -20,7 +20,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('epns/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('slack', SlackView.as_view()),
-    # path('outlook', OutlookApi.as_view()),
-    # path('teams', TeamsApi.as_view()),
-    # path('telegram', TelegramApi.as_view())
+    path('outlook', OutlookView.as_view()),
+    path('teams', TeamsView.as_view()),
+    path('telegram', TelegramView.as_view())
 ]

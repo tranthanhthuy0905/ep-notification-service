@@ -4,7 +4,7 @@ from .models import SlackModel, TeamsModel, TelegramModel, OutlookModel
 class SlackSerializers(serializers.ModelSerializer):
     class Meta:
         model = SlackModel
-        fields = '__all__'
+        fields = ['message']
 
     def create(self, validated_data):
         """
@@ -15,14 +15,34 @@ class SlackSerializers(serializers.ModelSerializer):
 class TeamsSerializers(serializers.ModelSerializer):
     class Meta:
         model = TeamsModel
-        fields = '__all__'
+        fields = ['message']
+
+    def create(self, validated_data):
+        """
+        Check the valid input
+        """
+        return TeamsModel.objects.create(**validated_data)
 
 class OutlookSerializers(serializers.ModelSerializer):
     class Meta:
         model = OutlookModel
-        fields = '__all__'
+        class Meta:
+            model = OutlookModel
+        fields = ['message', 'subject', 'recipient']
+
+    def create(self, validated_data):
+        """
+        Check the valid input
+        """
+        return OutlookModel.objects.create(**validated_data)
 
 class TelegramSerializers(serializers.ModelSerializer):
     class Meta:
         model = TelegramModel
-        fields = '__all__'
+        fields = ['message']
+
+    def create(self, validated_data):
+        """
+        Check the valid input
+        """
+        return TelegramModel.objects.create(**validated_data)

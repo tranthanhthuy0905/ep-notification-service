@@ -9,46 +9,90 @@ from drf_yasg.utils import swagger_auto_schema
 from .models import SlackModel, TeamsModel, TelegramModel, OutlookModel
 from .serializers import SlackSerializers, TeamsSerializers, TelegramSerializers, OutlookSerializers
 from ep_notification_service.config.common import Common
-import traceback
 from rest_framework.parsers import JSONParser
 import json
+import traceback
 
 class SlackView(APIView):
     @swagger_auto_schema(request_body=SlackSerializers)
     def post(self, request):
-
         url = Common.SLACK_URL_WEBHOOK
         message =request.data.get('message')
         saved_message = SlackModel(slackURl=url, message=message)
         saved_message.save()
-        
-        data = JSONParser().parse(request)
-        serializer = SlackSerializers(data=data)
-        if serializer.is_valid():
-            serializer.save()
-            response = requests.post(url)
-            return Response({"message": response.text},
-                            status=response.status_code)
-        traceback.print_exc()
-        return Response(
+        post_data = {
+            "text": message,
+        }
+        response = requests.post(url, json.dumps(post_data))
+        return Response({"message": response.text},
+                        status=response.status_code)
+
+
+
+class TeamsView(APIView):
+    @swagger_auto_schema(request_body=TeamsSerializers)
+    def post(self, request):
+        url = Common.TEAMS_URL_WEBHOOK
+        message =request.data.get('message')
+        saved_message = TeamsModel(teamsURl=url, message=message)
+        saved_message.save()
+        post_data = {
+            "text": message,
+        }
+        response = requests.post(url, json.dumps(post_data))
+        if response.text=="1":
+            return Response(
+                {"message": "Successfully send notification to Microsoft Teams"},
+                status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"message": "Sorry! The service failed to send notification to Microsoft Teams"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class OutlookView(APIView):
+    @swagger_auto_schema(request_body=OutlookSerializers)
+    def post(self, request):
+        subject = request.data.get('subject')
+        message = request.data.get('message')
+        recipient = request.data.get('recipient')
+        saved_message = OutlookModel(subject=subject, message=message, recipient=recipient)
+        saved_message.save()
+
+        try:
+            send_mail(subject,
+                      message,
+                      Common.EMAIL_HOST_USER, [recipient])
+            return Response(
+                {"message": "Successfully send notification to " + recipient},
+                status=status.HTTP_200_OK)
+        except:
+            traceback.print_exc()
+            return Response(
                 {
                     "message":
-                    "Sorry! The service failed to send notification to Slack"
+                    "Sorry! The service failed to send notification to " + recipient
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# class SlackView(ViewSet):
-#     queryset = SlackModel.objects.all()
-#     serializer = SlackSerializers
+class TelegramView(APIView):
+    @swagger_auto_schema(request_body=TelegramSerializers)
+    def post(self, request):
+        telegram_token = Common.TELEGRAM_TOKEN
+        telegram_chatID = Common.TELEGRAM_CHATID
+        message = request.data.get('message')
+        url = 'https://api.telegram.org/bot' + telegram_token+ '/sendMessage?chat_id=' + telegram_chatID + '&text=' + message
+        saved_message = TelegramModel(telegramURl=url, message=message)
+        saved_message.save()
 
-# class TeamsView(ViewSet):
-#     queryset = TeamsModel.objects.all()
-#     serializer = TeamsSerializers
+        response = requests.get(url)
+        if response.status_code == 200:
+            return Response(
+                {"message": "Successfully send notification to Telegram"},
+                status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"message": "Sorry! The service failed to send notification to Telegram"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-# class OutlookView(ViewSet):
-#     queryset = OutlookModel.objects.all()
-#     serializer = OutlookSerializers
-
-# class TelegramView(ViewSet):
-#     queryset = TelegramModel.objects.all()
-#     serializer = TelegramSerializers
+        

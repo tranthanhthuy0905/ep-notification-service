@@ -7,8 +7,8 @@ class SlackModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class TeamsModel(models.Model):
-    teamsURl = models.URLField(blank=False, null=False)
     message = models.TextField(blank=False, null=False)
+    teamsURl = models.URLField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -20,8 +20,7 @@ class OutlookModel(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
 class TelegramModel(models.Model):
-    telegram_token = models.CharField(max_length=100, null=False, blank=False)
-    telegram_chatID= models.CharField(max_length=10, null=False, blank=False)
     message = models.TextField(blank=False, null=False)
+    telegramURl = models.URLField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
