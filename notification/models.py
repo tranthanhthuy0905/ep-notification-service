@@ -15,7 +15,8 @@ class TeamsModel(NotificationModel):
     url = models.URLField(max_length=250, blank=False, null=False)
 
 class TelegramModel(NotificationModel):
-    url = models.URLField(max_length=250, blank=False, null=False)
+    telegram_token = models.CharField(max_length=100, blank=False, null=False)
+    telegram_chatID= models.CharField(max_length=20, blank=False, null=False)
 
 class OutlookModel(NotificationModel):
     subject = models.CharField(max_length=100, null=False, blank=False)

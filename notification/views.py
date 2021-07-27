@@ -86,9 +86,10 @@ class TelegramView(APIView):
         telegram_token = Common.TELEGRAM_TOKEN
         telegram_chatID = Common.TELEGRAM_CHATID
         message = request.data.get('message')
-        url = 'https://api.telegram.org/bot' + telegram_token+ '/sendMessage?chat_id=' + telegram_chatID + '&text=' + message
-        saved_message = TelegramModel(url=url, message=message)
+        saved_message = TelegramModel(telegram_token=telegram_token, telegram_chatID = telegram_chatID, message=message)
         saved_message.save()
+
+        url = 'https://api.telegram.org/bot' + telegram_token+ '/sendMessage?chat_id=' + telegram_chatID + '&text="' + message + '"'
 
         response = requests.get(url)
         if response.status_code == 200:
