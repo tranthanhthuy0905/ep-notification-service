@@ -9,7 +9,6 @@ from drf_yasg.utils import swagger_auto_schema
 from .models import SlackModel, TeamsModel, TelegramModel, OutlookModel
 from .serializers import SlackSerializers, TeamsSerializers, TelegramSerializers, OutlookSerializers
 from ep_notification_service.config.common import Common
-from rest_framework.parsers import JSONParser
 import json
 import traceback
 
@@ -18,14 +17,20 @@ class SlackView(APIView):
     def post(self, request):
         url = Common.SLACK_URL_WEBHOOK
         message =request.data.get('message')
-        saved_message = SlackModel(slackURl=url, message=message)
+        saved_message = SlackModel(url=url, message=message)
         saved_message.save()
         post_data = {
             "text": message,
         }
         response = requests.post(url, json.dumps(post_data))
-        return Response({"message": response.text},
-                        status=response.status_code)
+        if response.text=="ok":
+            return Response(
+                {"message": "Successfully send notification to Slack"},
+                status=status.HTTP_200_OK)
+        else:
+            return Response(
+                {"message": "Sorry! The service failed to send notification to Slack"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 
@@ -34,7 +39,7 @@ class TeamsView(APIView):
     def post(self, request):
         url = Common.TEAMS_URL_WEBHOOK
         message =request.data.get('message')
-        saved_message = TeamsModel(teamsURl=url, message=message)
+        saved_message = TeamsModel(url=url, message=message)
         saved_message.save()
         post_data = {
             "text": message,
@@ -82,7 +87,7 @@ class TelegramView(APIView):
         telegram_chatID = Common.TELEGRAM_CHATID
         message = request.data.get('message')
         url = 'https://api.telegram.org/bot' + telegram_token+ '/sendMessage?chat_id=' + telegram_chatID + '&text=' + message
-        saved_message = TelegramModel(telegramURl=url, message=message)
+        saved_message = TelegramModel(url=url, message=message)
         saved_message.save()
 
         response = requests.get(url)

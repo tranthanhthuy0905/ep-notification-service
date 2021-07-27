@@ -85,8 +85,6 @@ class Common(Configuration):
         },
     ]
 
-    WSGI_APPLICATION = 'ep_notification_service.wsgi.application'
-
     # Email
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 

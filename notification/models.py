@@ -1,26 +1,22 @@
 from django.db import models
 
-class SlackModel(models.Model):
-    slackURl = models.URLField(blank=False, null=False)
+class NotificationModel(models.Model):
     message = models.TextField(blank=False, null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        abstract = True
 
-class TeamsModel(models.Model):
-    message = models.TextField(blank=False, null=False)
-    teamsURl = models.URLField(blank=False, null=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+class SlackModel(NotificationModel):
+    url = models.URLField(max_length=250, blank=False, null=False)
 
-class OutlookModel(models.Model):
+class TeamsModel(NotificationModel):
+    url = models.URLField(max_length=250, blank=False, null=False)
+
+class TelegramModel(NotificationModel):
+    url = models.URLField(max_length=250, blank=False, null=False)
+
+class OutlookModel(NotificationModel):
     subject = models.CharField(max_length=100, null=False, blank=False)
-    message = models.TextField(blank=False, null=False)
     recipient = models.CharField(max_length=200, blank=False, null=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-class TelegramModel(models.Model):
-    message = models.TextField(blank=False, null=False)
-    telegramURl = models.URLField(blank=False, null=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
