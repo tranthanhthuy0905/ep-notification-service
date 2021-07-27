@@ -7,7 +7,7 @@ services:
     env_file:
       - ./.env
     volumes:
-      - postgres:/data/postgres
+      - ../db/postgres:/data/postgres
     ports:
       - "5432:5432"
     networks:
@@ -16,23 +16,33 @@ services:
   
   web:
     container_name: epns_web
+    restart: always
     build: .
     command: >
       sh -c "python wait_for_postgres.py &&
              python manage.py migrate && 
              python manage.py runserver 0.0.0.0:8000"
-    ports:
-      - 8000:8000
+    volumes:
+    - ./:/code
+    - ./static:/static
+    expose:
+      - "8000"
+    networks:
+      - postgres
     env_file:
       - ./.env
-    volumes:
-      - .:/code
+    environment:
+      - DJANGO_CONFIGURATION=Production
     depends_on:
       - postgres
 
+# networks:
+#   prod:
+#     external:
+#       name: epns
 networks:
   postgres:
     driver: bridge
 
-volumes:
-    postgres:
+# volumes:
+#     postgres:
