@@ -3,7 +3,6 @@
 import os
 import sys
 
-
 def main():
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ep_notification_service.config")
     os.environ.setdefault("DJANGO_CONFIGURATION", "Local")

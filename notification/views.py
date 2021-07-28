@@ -10,7 +10,8 @@ from .models import SlackModel, TeamsModel, TelegramModel, OutlookModel
 from .serializers import SlackSerializers, TeamsSerializers, TelegramSerializers, OutlookSerializers
 from ep_notification_service.config.common import Common
 import json
-import traceback
+import logging
+logger = logging.getLogger(__name__)
 
 class SlackView(APIView):
     @swagger_auto_schema(request_body=SlackSerializers)
@@ -72,7 +73,6 @@ class OutlookView(APIView):
                 {"message": "Successfully send notification to " + recipient},
                 status=status.HTTP_200_OK)
         except:
-            traceback.print_exc()
             return Response(
                 {
                     "message":
