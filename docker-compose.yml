@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   postgres:
@@ -8,15 +8,14 @@ services:
       - ./.env
     volumes:
       - ../db/postgres:/data/postgres
-    ports:
-      - "5432:5432"
     networks:
       - postgres
     restart: unless-stopped
-  
+
   web:
     container_name: epns_web
     restart: always
+    image: epns_web
     build: .
     command: >
       sh -c "python wait_for_postgres.py &&
@@ -29,8 +28,6 @@ services:
     volumes:
       - ./:/code
       - ./static:/static
-    ports:
-      - "8000:8000"
     expose:
       - "8000"
     networks:

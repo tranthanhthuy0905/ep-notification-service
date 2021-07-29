@@ -102,6 +102,14 @@ class Common(Configuration):
             )
         }
 
+    REST_FRAMEWORK = {
+        'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+        'TEST_REQUEST_RENDERER_CLASSES': [
+            'rest_framework.renderers.MultiPartRenderer',
+            'rest_framework.renderers.JSONRenderer',
+            'rest_framework.renderers.TemplateHTMLRenderer'
+        ]
+    }
 
     # Password validation
     # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -140,9 +148,6 @@ class Common(Configuration):
             'django.server': {
                 '()': 'django.utils.log.ServerFormatter',
                 'format': '[%(server_time)s] %(message)s',
-            },
-            'verbose': {
-                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
             },
             'simple': {
                 'format': '%(levelname)s %(message)s'

@@ -1,4 +1,3 @@
-#from rest_framework.viewsets import ViewSet
 import requests
 from django.core.mail import send_mail
 from django.conf import settings
@@ -11,6 +10,7 @@ from .serializers import SlackSerializers, TeamsSerializers, TelegramSerializers
 from ep_notification_service.config.common import Common
 import json
 import logging
+
 logger = logging.getLogger(__name__)
 
 class SlackView(APIView):

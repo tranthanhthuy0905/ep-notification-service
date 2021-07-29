@@ -18,6 +18,7 @@ psycopg2==2.9.1
 psycopg2-binary==2.9.1
 pyparsing==2.4.7
 python-dotenv==0.19.0
+python-json-logger==2.0.2
 pytz==2021.1
 requests==2.26.0
 ruamel.yaml==0.17.10

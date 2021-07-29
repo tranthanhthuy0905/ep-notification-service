@@ -18,9 +18,9 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('epns/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('slack', SlackView.as_view()),
-    path('outlook', OutlookView.as_view()),
-    path('teams', TeamsView.as_view()),
-    path('telegram', TelegramView.as_view())
+    path('epns/', schema_view.with_ui('swagger', cache_timeout=0), name='epns'),
+    path('slack', SlackView.as_view(), name='slack'),
+    path('outlook', OutlookView.as_view(), name='outlook'),
+    path('teams', TeamsView.as_view(), name='teams'),
+    path('telegram', TelegramView.as_view(), name='telegram')
 ]
