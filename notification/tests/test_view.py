@@ -19,7 +19,7 @@ class TestViews(BaseTest):
     def test_post_teams(self):
         self.post_request(TeamsModel, self.teams_url)
     
-    def test_post_telegram(self):
+    def test_post_telegram(self): 
         self.post_request(TelegramModel, self.telegram_url)
 
     def test_post_outlook(self):
