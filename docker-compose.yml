@@ -10,6 +10,8 @@ services:
       - ../db/postgres:/data/postgres
     networks:
       - postgres
+    ports:
+      - "5432"
     restart: unless-stopped
 
   web:
@@ -28,8 +30,8 @@ services:
     volumes:
       - ./:/code
       - ./static:/static
-    expose:
-      - "8000"
+    # expose:
+    #   - "8000"
     networks:
       - postgres
     depends_on:

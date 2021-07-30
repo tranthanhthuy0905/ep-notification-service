@@ -10,6 +10,7 @@ from .serializers import SlackSerializers, TeamsSerializers, TelegramSerializers
 from ep_notification_service.config.common import Common
 import json
 import logging
+import traceback
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +28,7 @@ class SlackView(APIView):
         if response.text=="ok":
             return Response(
                 {"message": "Successfully send notification to Slack"},
-                status=status.HTTP_200_OK)
+                status=status.HTTP_201_CREATED)
         else:
             return Response(
                 {"message": "Sorry! The service failed to send notification to Slack"},
@@ -49,7 +50,7 @@ class TeamsView(APIView):
         if response.text=="1":
             return Response(
                 {"message": "Successfully send notification to Microsoft Teams"},
-                status=status.HTTP_200_OK)
+                status=status.HTTP_201_CREATED)
         else:
             return Response(
                 {"message": "Sorry! The service failed to send notification to Microsoft Teams"},
@@ -71,8 +72,9 @@ class OutlookView(APIView):
                       Common.EMAIL_HOST_USER, [recipient])
             return Response(
                 {"message": "Successfully send notification to " + recipient},
-                status=status.HTTP_200_OK)
+                status=status.HTTP_201_CREATED)
         except:
+            traceback.print_exc()
             return Response(
                 {
                     "message":

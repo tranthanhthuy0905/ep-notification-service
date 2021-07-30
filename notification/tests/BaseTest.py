@@ -1,4 +1,4 @@
-from rest_framework import APITestCase
+from rest_framework.test import APITestCase, APIClient
 from django.urls import reverse
 
 class BaseTest(APITestCase):
@@ -8,6 +8,7 @@ class BaseTest(APITestCase):
         self.outlook_url = reverse('outlook')
         self.teams_url = reverse('teams')
         self.telegram_url = reverse('telegram')
+        self.client = APIClient()
         return super().setUp()
 
     def tearDown(self):
