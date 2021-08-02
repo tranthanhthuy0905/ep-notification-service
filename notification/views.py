@@ -17,44 +17,54 @@ logger = logging.getLogger(__name__)
 class SlackView(APIView):
     @swagger_auto_schema(request_body=SlackSerializers)
     def post(self, request):
-        url = Common.SLACK_URL_WEBHOOK
+        url = request.data.get('url')
         message =request.data.get('message')
         saved_message = SlackModel(url=url, message=message)
         saved_message.save()
         post_data = {
             "text": message,
         }
-        response = requests.post(url, json.dumps(post_data))
-        if response.text=="ok":
+        if url == "":
             return Response(
-                {"message": "Successfully send notification to Slack"},
-                status=status.HTTP_201_CREATED)
+                    {"message": "Sorry! The service failed to send notification to Slack with no URL Webhook"},
+                    status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(
-                {"message": "Sorry! The service failed to send notification to Slack"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            response = requests.post(url, json.dumps(post_data))
+            if response.text=="ok":
+                return Response(
+                    {"message": "Successfully send notification to Slack"},
+                    status=status.HTTP_201_CREATED)
+            else:
+                return Response(
+                    {"message": "Sorry! The service failed to send notification to Slack"},
+                    status=status.HTTP_400_BAD_REQUEST)
 
 
 
 class TeamsView(APIView):
     @swagger_auto_schema(request_body=TeamsSerializers)
     def post(self, request):
-        url = Common.TEAMS_URL_WEBHOOK
+        url = request.data.get('url')
         message =request.data.get('message')
         saved_message = TeamsModel(url=url, message=message)
         saved_message.save()
         post_data = {
             "text": message,
         }
-        response = requests.post(url, json.dumps(post_data))
-        if response.text=="1":
+        if url == "":
             return Response(
-                {"message": "Successfully send notification to Microsoft Teams"},
-                status=status.HTTP_201_CREATED)
+                    {"message": "Sorry! The service failed to send notification to Microsoft Teams with no URL Webhook"},
+                    status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(
-                {"message": "Sorry! The service failed to send notification to Microsoft Teams"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            response = requests.post(url, json.dumps(post_data))
+            if response.text=="1":
+                return Response(
+                    {"message": "Successfully send notification to Microsoft Teams"},
+                    status=status.HTTP_201_CREATED)
+            else:
+                return Response(
+                    {"message": "Sorry! The service failed to send notification to Microsoft Teams"},
+                    status=status.HTTP_400_BAD_REQUEST)
 
 
 class OutlookView(APIView):
@@ -80,13 +90,13 @@ class OutlookView(APIView):
                     "message":
                     "Sorry! The service failed to send notification to " + recipient
                 },
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                status=status.HTTP_400_BAD_REQUEST)
 
 class TelegramView(APIView):
     @swagger_auto_schema(request_body=TelegramSerializers)
     def post(self, request):
-        telegram_token = Common.TELEGRAM_TOKEN
-        telegram_chatID = Common.TELEGRAM_CHATID
+        telegram_token = request.data.get('telegram_token')
+        telegram_chatID = request.data.get('telegram_chatID')
         message = request.data.get('message')
         saved_message = TelegramModel(telegram_token=telegram_token, telegram_chatID = telegram_chatID, message=message)
         saved_message.save()
@@ -101,6 +111,6 @@ class TelegramView(APIView):
         else:
             return Response(
                 {"message": "Sorry! The service failed to send notification to Telegram"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                status=status.HTTP_400_BAD_REQUEST)
 
         

@@ -12,15 +12,15 @@ class TestURL(BaseTest):
     def test_epns_url(self):
         self.url_base_test(self.epns_url)
 
-    def test_slack_url(self):
-        self.url_base_test(self.slack_url)
+    # def test_slack_url(self):
+    #     self.url_base_test(self.slack_url)
 
-    def test_teams_url(self):
-        self.url_base_test(self.teams_url)
+    # def test_teams_url(self):
+    #     self.url_base_test(self.teams_url)
 
-    def test_telegram_url(self):
-        self.url_base_test(self.telegram_url)
+    # def test_telegram_url(self):
+    #     self.url_base_test(self.telegram_url)
 
-    def test_outlook_url(self):
-        self.url_base_test(self.outlook_url)
+    # def test_outlook_url(self):
+    #     self.url_base_test(self.outlook_url)
 
