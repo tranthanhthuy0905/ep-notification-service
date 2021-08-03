@@ -1,0 +1,6 @@
+2021-08-02T05:52:20+0000 django.server WARNING "GET / HTTP/1.1" 404 2915
+2021-08-02T05:52:24+0000 django.server INFO "GET /epns/ HTTP/1.1" 200 2459
+2021-08-02T05:52:24+0000 django.server INFO "GET /static/drf-yasg/swagger-ui-dist/swagger-ui.css HTTP/1.1" 200 143074
+2021-08-02T05:52:24+0000 django.server INFO "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-standalone-preset.js HTTP/1.1" 200 329649
+2021-08-02T05:52:24+0000 django.server INFO "GET /static/drf-yasg/swagger-ui-dist/swagger-ui-bundle.js HTTP/1.1" 200 1038857
+2021-08-02T05:52:24+0000 django.server INFO "GET /epns/?format=openapi HTTP/1.1" 200 3092
