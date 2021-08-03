@@ -240,10 +240,10 @@ class Common(Configuration):
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
     # SLACK CONFIGURATION
-    #SLACK_URL_WEBHOOK = os.getenv('SLACK_URL_WEBHOOK')
+    SLACK_URL_WEBHOOK = os.getenv('SLACK_URL_WEBHOOK')
 
     # MICROSOFT TEAMS CONFIGURATION
-    #TEAMS_URL_WEBHOOK = os.getenv('TEAMS_URL_WEBHOOK')
+    TEAMS_URL_WEBHOOK = os.getenv('TEAMS_URL_WEBHOOK')
 
     # OUTLOOK CONFIGURATION
     # Add Protocol which encrypts and delivers mail securely
@@ -258,5 +258,5 @@ class Common(Configuration):
     SERVER_EMAIL = EMAIL_HOST_USER
 
     # TELEGRAM CONFIGURATION
-    # TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-    # TELEGRAM_CHATID = os.getenv('TELEGRAM_CHATID')
+    TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
+    TELEGRAM_CHATID = os.getenv('TELEGRAM_CHATID')
