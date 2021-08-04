@@ -1,10 +1,10 @@
-
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
+
 from os.path import join
 import dj_database_url
-from datetime import timedelta
 from configurations import Configuration
 from distutils.util import strtobool
 
@@ -20,7 +20,6 @@ class Common(Configuration):
     DEBUG = strtobool(os.getenv('DJANGO_DEBUG', 'no'))
 
     ALLOWED_HOSTS = ['*']
-
 
     # Application definition
 
@@ -96,11 +95,11 @@ class Common(Configuration):
     # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
     DATABASES = {
-            'default': dj_database_url.config(
-                default='postgres://postgres:postgres@localhost:5432/epns',
-                conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-            )
-        }
+        'default': dj_database_url.config(
+            default='postgres://postgres:postgres@localhost:5432/epns',
+            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
+        )
+    }
 
     REST_FRAMEWORK = {
         'TEST_REQUEST_DEFAULT_FORMAT': 'json',
@@ -129,14 +128,14 @@ class Common(Configuration):
     ]
 
     SWAGGER_SETTINGS = {
-            'SECURITY_DEFINITIONS': {
-                'api_key': {
-                    'type': 'apiKey',
-                    'in': 'header',
-                    'name': 'Authorization'
-                }
-            },
-        }
+        'SECURITY_DEFINITIONS': {
+            'api_key': {
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'Authorization'
+            }
+        },
+    }
 
     LOG_DIR = os.path.join(BASE_DIR, '..', 'logs')
     # Logging

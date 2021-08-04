@@ -106,3 +106,12 @@ site
 .mypy_cache/
 access.log
 error.log
+
+# MacOS
+.DS_Store
+
+# pytest
+.pytest_cache
+
+# vs code
+.vscode

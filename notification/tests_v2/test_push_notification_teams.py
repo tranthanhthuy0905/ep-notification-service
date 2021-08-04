@@ -1,5 +1,6 @@
 import pytest
-from notification.tests_v2.fixtures import teams_url, teams_url_webhook, message
+from .fixtures.teams import teams_url, teams_url_webhook
+from .fixtures.message import message
 
 
 @pytest.mark.django_db
@@ -10,7 +11,10 @@ def test_post_teams_full(client, teams_url_webhook, message, teams_url):
         'message': message
     }
     response = client.post(teams_url, post_data)
+    result = response.json()
+
     assert response.status_code == 201
+    assert result.get('message') == 'Successfully send notification to Microsoft Teams'
 
 
 @pytest.mark.django_db
@@ -21,4 +25,8 @@ def test_post_teams_null_url_webhook(client, message, teams_url):
         'message': message
     }
     response = client.post(teams_url, post_data)
+    result = response.json()
+
     assert response.status_code == 400
+    assert result.get(
+        'message') == 'Sorry! The service failed to send notification to Microsoft Teams with no URL Webhook'

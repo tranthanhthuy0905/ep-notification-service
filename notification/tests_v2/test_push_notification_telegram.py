@@ -1,5 +1,6 @@
 import pytest
-from notification.tests_v2.fixtures import telegram_url, telegram_token, telegram_chat_id, message
+from .fixtures.telegram import telegram_token, telegram_chat_id, telegram_url
+from .fixtures.message import message
 
 
 @pytest.mark.django_db
