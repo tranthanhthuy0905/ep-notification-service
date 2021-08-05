@@ -21,15 +21,14 @@ class SlackView(APIView):
         message = request.data.get('message')
         saved_message = SlackModel(url=url, message=message)
         saved_message.save()
-        post_data = {
-            "text": message,
-        }
+        post_data = message.replace("\'", "\"")  # Convert data before send
         if url == "":
             return Response(
                 {"message": "Sorry! The service failed to send notification to Slack with no URL Webhook"},
                 status=status.HTTP_400_BAD_REQUEST)
         else:
-            response = requests.post(url, json.dumps(post_data))
+            headers = {'Content-Type': "application/json"}
+            response = requests.post(url, post_data, headers=headers)
             if response.text == "ok":
                 return Response(
                     {"message": "Successfully send notification to Slack"},
@@ -47,15 +46,14 @@ class TeamsView(APIView):
         message = request.data.get('message')
         saved_message = TeamsModel(url=url, message=message)
         saved_message.save()
-        post_data = {
-            "text": message,
-        }
+        post_data = message.replace("\'", "\"")  # Convert data before send
         if url == "":
             return Response(
                 {"message": "Sorry! The service failed to send notification to Microsoft Teams with no URL Webhook"},
                 status=status.HTTP_400_BAD_REQUEST)
         else:
-            response = requests.post(url, json.dumps(post_data))
+            headers = {'Content-Type': "application/json"}
+            response = requests.post(url, post_data, headers=headers)
             if response.text == "1":
                 return Response(
                     {"message": "Successfully send notification to Microsoft Teams"},

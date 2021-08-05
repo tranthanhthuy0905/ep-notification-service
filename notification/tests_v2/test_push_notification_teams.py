@@ -1,14 +1,14 @@
 import pytest
-from .fixtures.teams import teams_url, teams_url_webhook
+from .fixtures.teams import teams_url, teams_url_webhook, teams_message
 from .fixtures.message import message
 
 
 @pytest.mark.django_db
-def test_post_teams_full(client, teams_url_webhook, message, teams_url):
+def test_post_teams_full(client, teams_url_webhook, teams_message, teams_url):
     # Test data is correct url and has message
     post_data = {
         'url': teams_url_webhook,
-        'message': message
+        'message': [teams_message]
     }
     response = client.post(teams_url, post_data)
     result = response.json()
@@ -18,11 +18,11 @@ def test_post_teams_full(client, teams_url_webhook, message, teams_url):
 
 
 @pytest.mark.django_db
-def test_post_teams_null_url_webhook(client, message, teams_url):
+def test_post_teams_null_url_webhook(client, teams_message, teams_url):
     # Test data is null url and has message
     post_data = {
         'url': '',
-        'message': message
+        'message': [teams_message]
     }
     response = client.post(teams_url, post_data)
     result = response.json()

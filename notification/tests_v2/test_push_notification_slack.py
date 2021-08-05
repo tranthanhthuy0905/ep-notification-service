@@ -1,13 +1,12 @@
 import pytest
-from .fixtures.slack import slack_url, slack_url_webhook
-from .fixtures.message import message
+from .fixtures.slack import slack_url, slack_url_webhook, slack_message
 
 
 @pytest.mark.django_db
-def test_post_slack_full(client, slack_url_webhook, slack_url, message):
+def test_post_slack_full(client, slack_url_webhook, slack_url, slack_message):
     post_data = {
         'url': slack_url_webhook,
-        'message': message
+        'message': [slack_message]
     }
     response = client.post(slack_url, post_data)
     result = response.json()
@@ -16,12 +15,13 @@ def test_post_slack_full(client, slack_url_webhook, slack_url, message):
 
 
 @pytest.mark.django_db
-def test_push_slack_null_url(client, slack_url_webhook, slack_url, message):
+def test_push_slack_null_url(client, slack_url_webhook, slack_url, slack_message):
     post_data = {
         'url': "",
-        'message': message
+        'message': [slack_message]
     }
     response = client.post(slack_url, post_data)
     result = response.json()
+
     assert response.status_code == 400
     assert result.get('message') == 'Sorry! The service failed to send notification to Slack with no URL Webhook'

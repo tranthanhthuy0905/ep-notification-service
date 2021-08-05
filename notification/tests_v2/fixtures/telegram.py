@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from ep_notification_service.config.common import Common
+from django.conf import settings
 
 
 @pytest.fixture(scope='function')
@@ -10,9 +10,9 @@ def telegram_url():
 
 @pytest.fixture(scope='function')
 def telegram_token():
-    return Common.TELEGRAM_TOKEN
+    return settings.TELEGRAM_TOKEN
 
 
 @pytest.fixture(scope='function')
 def telegram_chat_id():
-    return Common.TELEGRAM_CHATID
+    return settings.TELEGRAM_CHATID

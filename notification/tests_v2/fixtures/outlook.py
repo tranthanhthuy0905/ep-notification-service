@@ -1,6 +1,6 @@
 import pytest
 from django.urls import reverse
-from ep_notification_service.config.common import Common
+from django.conf import settings
 
 
 @pytest.fixture(scope='function')
@@ -15,4 +15,4 @@ def outlook_subject():
 
 @pytest.fixture(scope='function')
 def outlook_recipient():
-    return Common.EMAIL_HOST_USER
+    return settings.EMAIL_HOST_USER

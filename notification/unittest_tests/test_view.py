@@ -24,7 +24,7 @@ class TestViews(BaseTest):
                         "Should SUCCEED to push notification to " + service + " with correct URL Webhook or destination contact point.")
             self.assertEqual(model.objects.count(), initialAmount + 1,
                         "Should SUCCEED to update notification data to " + service + "'s database.")
-            self.assertEqual(model.objects.get().message, 'This works for testing purpose')
+            self.assertEqual(model.objects.get().slack_message, 'This works for testing purpose')
 
     def post_telegram_cases(self, url, telegram_token, telegram_chatID, status):
         initialAmount = TelegramModel.objects.count()
@@ -53,7 +53,7 @@ class TestViews(BaseTest):
                         "Should SUCCEED to push notification to Telegram with correct chat bot token and id.")
             self.assertEqual(TelegramModel.objects.count(), initialAmount + 1,
                         "Should SUCCEED to update notification data to Telegram's database with correct chat bot token and id.")
-            self.assertEqual(TelegramModel.objects.get().message, 'This works for testing purpose')
+            self.assertEqual(TelegramModel.objects.get().slack_message, 'This works for testing purpose')
 
     def send_mail_cases(self, subject, recipient):
         initialAmount = OutlookModel.objects.count()
@@ -67,7 +67,7 @@ class TestViews(BaseTest):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(OutlookModel.objects.count(), initialAmount + 1)
-        self.assertEqual(OutlookModel.objects.get().message, 'This works for testing purpose')
+        self.assertEqual(OutlookModel.objects.get().slack_message, 'This works for testing purpose')
 
     def test_post_slack_full(self):
         webhook = 'https://hooks.slack.com/services/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'
