@@ -1,0 +1,20 @@
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+  | migrations
+  | site
+  | static
+  | keys
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 120
+skip_glob = "^(migrations|tests|site|static|keys)"
+default_section = "THIRDPARTY"
+known_third_party = ["configurations", "dj_database_url", "django", "dotenv", "drf_yasg", "psycopg2", "pytest", "requests", "rest_framework"]
+known_first_party = []

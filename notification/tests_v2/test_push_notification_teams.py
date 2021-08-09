@@ -30,3 +30,18 @@ def test_post_teams_null_url_webhook(client, teams_message, teams_url):
     assert response.status_code == 400
     assert result.get(
         'message') == 'Sorry! The service failed to send notification to Microsoft Teams with no URL Webhook'
+
+
+@pytest.mark.django_db
+def test_post_teams_null_url_webhook_v2(client, teams_message, teams_url):
+    # Test data is null url and has message
+    post_data = {
+        'url': '',
+        'message': [teams_message]
+    }
+    response = client.post(teams_url, post_data)
+    result = response.json()
+
+    assert response.status_code == 400
+    assert result.get(
+        'message') == 'Sorry! The service failed to send notification to Microsoft Teams with no URL Webhook'
