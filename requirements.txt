@@ -25,6 +25,7 @@ packaging==21.0
 platformdirs==2.2.0
 pluggy==0.13.1
 pre-commit==2.14.0
+psycopg2==2.9.1
 psycopg2-binary==2.9.1
 py==1.10.0
 pyparsing==2.4.7

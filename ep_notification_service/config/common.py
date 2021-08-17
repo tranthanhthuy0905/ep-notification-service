@@ -2,9 +2,9 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-
 from os.path import join
 import dj_database_url
+from datetime import timedelta
 from configurations import Configuration
 from distutils.util import strtobool
 
@@ -62,7 +62,8 @@ class Common(Configuration):
         'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     )
 
-    TEMPLATE_PATH = os.path.normpath(join(os.path.dirname(BASE_DIR), 'templates'))
+    TEMPLATE_PATH = os.path.normpath(
+        join(os.path.dirname(BASE_DIR), 'templates'))
 
     # Media files
     MEDIA_ROOT = join(os.path.dirname(BASE_DIR), 'templates')
@@ -87,22 +88,30 @@ class Common(Configuration):
     # Email
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-    ADMINS = (
-        ('Author', 'thuytt7@vng.com.vn'),
-    )
+    ADMINS = (('Author', 'thuytt7@vng.com.vn'), )
 
-    # Database
+    # Redis
+    REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
+
+    # Postgresql
     # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+    POSTGRES_DB = os.getenv("POSTGRES_DB", "epns")
+    POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
+    POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "postgres")
+    POSTGRES_HOST = os.getenv("POSTGRES_HOST", "localhost")
+
+    DATABASE_URL = f"postgres://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:5432/{POSTGRES_DB}"
     DATABASES = {
-        'default': dj_database_url.config(
-            default='postgres://postgres:postgres@localhost:5432/epns',
-            conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
-        )
+        'default':
+        dj_database_url.config(default=DATABASE_URL,
+                               conn_max_age=int(
+                                   os.getenv('POSTGRES_CONN_MAX_AGE', 600)))
     }
 
     REST_FRAMEWORK = {
-        'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+        'TEST_REQUEST_DEFAULT_FORMAT':
+        'json',
         'TEST_REQUEST_RENDERER_CLASSES': [
             'rest_framework.renderers.JSONRenderer',
             'rest_framework.renderers.TemplateHTMLRenderer'
@@ -114,16 +123,20 @@ class Common(Configuration):
 
     AUTH_PASSWORD_VALIDATORS = [
         {
-            'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+            'NAME':
+            'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
         },
         {
-            'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+            'NAME':
+            'django.contrib.auth.password_validation.MinimumLengthValidator',
         },
         {
-            'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+            'NAME':
+            'django.contrib.auth.password_validation.CommonPasswordValidator',
         },
         {
-            'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+            'NAME':
+            'django.contrib.auth.password_validation.NumericPasswordValidator',
         },
     ]
 
@@ -137,19 +150,12 @@ class Common(Configuration):
         },
     }
 
-    LOG_DIR = os.path.join(BASE_DIR, '..', 'logs')
+    LOG_DIR = os.path.join(BASE_DIR, "..", "logs")
     # Logging
     LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'django.server': {
-                '()': 'django.utils.log.ServerFormatter',
-                'format': '[%(server_time)s] %(message)s',
-            },
-            'simple': {
-                'format': '%(levelname)s %(message)s'
-            },
+        "version": 1,
+        "disable_existing_loggers": False,
+        "formatters": {
             "standard": {
                 "format": "%(asctime)s %(name)s %(levelname)s %(message)s",
                 "datefmt": "%Y-%m-%dT%H:%M:%S%z",
@@ -157,69 +163,64 @@ class Common(Configuration):
             "json": {
                 "format": "%(asctime)s %(name)s %(levelname)s %(message)s",
                 "datefmt": "%Y-%m-%dT%H:%M:%S%z",
-                "class": "pythonjsonlogger.jsonlogger.JsonFormatter"
-            }
-        },
-        'filters': {
-            'require_debug_true': {
-                '()': 'django.utils.log.RequireDebugTrue',
+                "class": "pythonjsonlogger.jsonlogger.JsonFormatter",
             },
         },
-        'handlers': {
-            'django.server': {
-                'level': 'INFO',
-                'class': 'logging.StreamHandler',
-                'formatter': 'django.server',
+        "filters": {
+            "require_debug_true": {
+                "()": "django.utils.log.RequireDebugTrue",
             },
-            'console': {
-                'level': 'DEBUG',
-                'class': 'logging.StreamHandler',
-                'formatter': 'json'
+        },
+        "handlers": {
+            "console": {
+                "level": "DEBUG",
+                "class": "logging.StreamHandler",
+                "formatter": "json",
             },
-            'access': {
-                'level': 'INFO',
-                'filename': os.path.join(LOG_DIR, 'access.log'),
-                'class': 'logging.handlers.TimedRotatingFileHandler',
-                'when': 'midnight',  # 1024 * 1024 * 15B = 15MB
-                'backupCount': 10,
-                'formatter': 'standard',
+            "access": {
+                "level": "INFO",
+                "filename": os.path.join(LOG_DIR, "access.log"),
+                "class": "logging.handlers.TimedRotatingFileHandler",
+                "when": "midnight",  # 1024 * 1024 * 15B = 15MB
+                "backupCount": 10,
+                "formatter": "standard",
             },
-            'error': {
-                'level': 'ERROR',
-                'filename': os.path.join(LOG_DIR, 'error.log'),
-                'class': 'logging.handlers.TimedRotatingFileHandler',
-                # 'maxBytes': 15728640,  # 1024 * 1024 * 15B = 15MB
-                'when': 'midnight',
-                'backupCount': 10,
-                'formatter': 'standard',
+            "error": {
+                "level": "ERROR",
+                "filename": os.path.join(LOG_DIR, "error.log"),
+                "class": "logging.handlers.TimedRotatingFileHandler",
+                "when": "midnight",
+                "backupCount": 10,
+                "formatter": "standard",
+            },
+        },
+        "loggers": {
+            "django": {
+                "handlers": ["console"],
+                "propagate": False,
+            },
+            "django.server": {
+                "handlers": ["console", "access"],
+                "level": "DEBUG",
+                "propagate": False,
+            },
+            "django.request": {
+                "handlers": ["console", "error"],
+                "level": "ERROR",
+                "propagate": False,
+            },
+            "django.db.backends": {
+                "handlers": ["console", "access"],
+                "level": "INFO"
+            },
+            "ep_notification_service": {
+                "handlers": ["console", "access", "error"],
+                "level": "DEBUG",
+                "propagate": False,
             }
         },
-        'loggers': {
-            'django': {
-                'handlers': ['console'],
-                'propagate': False,
-            },
-            'django.server': {
-                'handlers': ['console', 'access'],
-                'level': 'DEBUG',
-                'propagate': False,
-            },
-            'django.request': {
-                'handlers': ['console', 'error'],
-                'level': 'ERROR',
-                'propagate': False,
-            },
-            'django.db.backends': {
-                'handlers': ['console', 'access'],
-                'level': 'INFO'
-            },
-            'ep_notification_service': {
-                'handlers': ['console', 'access', 'error'],
-                'level': 'DEBUG',
-                'propagate': False,
-            }
-        }
     }
+
     # Internationalization
     # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -238,12 +239,6 @@ class Common(Configuration):
 
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-    # SLACK CONFIGURATION
-    SLACK_URL_WEBHOOK = os.getenv('SLACK_URL_WEBHOOK')
-
-    # MICROSOFT TEAMS CONFIGURATION
-    TEAMS_URL_WEBHOOK = os.getenv('TEAMS_URL_WEBHOOK')
-
     # OUTLOOK CONFIGURATION
     # Add Protocol which encrypts and delivers mail securely
     EMAIL_USE_TLS = True
@@ -255,7 +250,3 @@ class Common(Configuration):
     EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
     SERVER_EMAIL = EMAIL_HOST_USER
-
-    # TELEGRAM CONFIGURATION
-    TELEGRAM_TOKEN = os.getenv('TELEGRAM_TOKEN')
-    TELEGRAM_CHATID = os.getenv('TELEGRAM_CHATID')

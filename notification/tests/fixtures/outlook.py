@@ -15,4 +15,5 @@ def outlook_subject():
 
 @pytest.fixture(scope='function')
 def outlook_recipient():
-    return settings.EMAIL_HOST_USER
+    # Fake data
+    return "thuy.tran.200097@student.fulbright.edu.vn"

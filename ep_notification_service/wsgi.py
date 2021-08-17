@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/3.2/howto/deployment/wsgi/
 
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ep_notification_service.config")
-os.environ.setdefault("DJANGO_CONFIGURATION", "Production")
+from django.core.wsgi import get_wsgi_application
 
-from configurations.wsgi import get_wsgi_application  # noqa
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ep_notification_service.settings')
+
 application = get_wsgi_application()

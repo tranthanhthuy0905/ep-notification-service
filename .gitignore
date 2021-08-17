@@ -113,5 +113,9 @@ error.log
 # pytest
 .pytest_cache
 
+# Ignore logs
+logs
+*.log
+data/postgres
 # vs code
 .vscode

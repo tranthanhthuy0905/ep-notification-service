@@ -1,6 +1,5 @@
 import pytest
 from django.urls import reverse
-from django.conf import settings
 
 
 @pytest.fixture(scope='function')
@@ -10,9 +9,9 @@ def telegram_url():
 
 @pytest.fixture(scope='function')
 def telegram_token():
-    return settings.TELEGRAM_TOKEN
+    return "1909979117:AAE_RNiG-rV0nQV45B7aTK5YMtzd7FMbPf8"
 
 
 @pytest.fixture(scope='function')
 def telegram_chat_id():
-    return settings.TELEGRAM_CHATID
+    return "1933919258"

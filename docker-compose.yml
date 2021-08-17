@@ -3,22 +3,22 @@ version: "3"
 services:
   postgres:
     container_name: epns_postgres
-    image: postgres
+    image: postgres:13-alpine
     env_file:
       - ./.env
     volumes:
-      - ../db/postgres:/data/postgres
+      - ./data/postgres:/data/postgres
     networks:
       - postgres
     ports:
       - "5432"
-    restart: unless-stopped
+    restart: always
 
   web:
     container_name: epns_web
     restart: always
     image: epns_web
-    build: .
+    build: ./
     command: >
       sh -c "python wait_for_postgres.py &&
              python manage.py migrate && 
@@ -30,8 +30,8 @@ services:
     volumes:
       - ./:/code
       - ./static:/static
-    # expose:
-    #   - "8000"
+    expose:
+      - "8000"
     networks:
       - postgres
     depends_on:
